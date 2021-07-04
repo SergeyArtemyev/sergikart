@@ -1,4 +1,4 @@
-let a = { a: 2, b: 3 };
-a = JSON.stringify(a);
+let date = new Date('Jan 2, 1970 00:00:00 GMT+00:00');
+let datenow = Date.now();
 
-console.log(JSON.parse(a));
+console.log(date.getTime());
