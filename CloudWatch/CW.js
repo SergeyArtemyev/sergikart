@@ -28,7 +28,7 @@ class CW {
                       | limit ${this.limit}
                       | sort @timestamp desc
                       `,
-                    startTime: new Date().getTime() - 86400000 + this.range,
+                    startTime: new Date().getTime() - 86400000 * this.range,
                     logGroupName: this.logGroupName,
                 };
             case 'requestId':
