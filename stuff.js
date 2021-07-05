@@ -1,4 +1,6 @@
-let date = new Date('Jan 2, 1970 00:00:00 GMT+00:00');
-let datenow = Date.now();
+let a =
+    'CnMKOQo1OTg1MTIzMzA4ODc1Oi9hd3MvbGFtYmRhL3BzcC1kZXYtZWNhcHpQcm9jZXNzQVBheW1lbnQQAxI2GhgCBf2sa+oAAAADJlzn0QAGDh2HoAAAAaIgASjsoNaRpy8w9pnbkacvODBAmYcBSJpoUK1MECYYAQ==';
+let b =
+    'CnMKOQo1OTg1MTIzMzA4ODc1Oi9hd3MvbGFtYmRhL3BzcC1kZXYtZWNhcHpQcm9jZXNzQVBheW1lbnQQAxI2GhgCBf2sa+oAAAADJlzn0QAGDh2HoAAAAaIgASjsoNaRpy8w9pnbkacvODBAmYcBSJpoUK1MECsYAQ==';
 
-console.log(date.getTime());
+console.log(a === b);

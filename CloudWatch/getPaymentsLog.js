@@ -1,25 +1,31 @@
 const AWS = require('aws-sdk');
 const CW = require('./CW');
-const cloudwatchlogs = new AWS.CloudWatchLogs();
 
 const getLogsData = async (inputData) => {
     const CWInstance = new CW(inputData);
     let ptr;
 
     //TO DO
-    // implement cycle to repeat query
+    // implement loop to repeat query
 
-    const params = CWInstance.configureQuery();
+    while (true) {
+        let params = CWInstance.configureQuery();
 
-    const { queryId } = await CWInstance.getQueryId(params);
+        const { queryId } = await CWInstance.getQueryId(params);
+        console.log(queryId);
 
-    ptr = await CWInstance.getQueryResult(queryId);
-    console.log(ptr);
-    // map through with ptrs
-    const data = await cloudwatchlogs.getLogRecord({ logRecordPointer: ptr }).promise();
-    console.log(data.logRecord['@requestId']);
+        ptr = await CWInstance.getQueryResult(queryId);
 
-    return {};
+        if (CWInstance.getStatus() !== 'complete') {
+            const data = await CWInstance.getLogRecord(ptr);
+            console.log(data);
+
+            CWInstance.setParams({ id: data.logRecord['@requestId'], query: 'requestId' });
+            console.log(params);
+        } else {
+            return {};
+        }
+    }
 };
 
 getLogsData({
@@ -28,4 +34,6 @@ getLogsData({
     id: '27057050',
     limit: 10,
     query: 'message',
-}).then((data) => console.log(data));
+})
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
