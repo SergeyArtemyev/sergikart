@@ -12,6 +12,16 @@ class CW {
         this.limit = params.limit;
         this.query = params.query;
         this.status = 'running';
+        this.method = params.method;
+        this.cashedId = '';
+        this.logGroupNames = {
+            payment: [
+                '/aws/lambda/psp-dev-ecapzProcessAPayment',
+                '/aws/lambda/ecapz-callback-api-dev-pspCallbacksPlatioResult',
+                '/aws/lambda/psp-dev-ecapzGetPaymentStatus',
+            ],
+            payout: ['/aws/lambda/psp-dev-ecapzPayout', '/aws/lambda/psp-dev-ecapzPayoutStatus'],
+        };
     }
 
     async getQueryId(params) {
@@ -20,6 +30,7 @@ class CW {
 
     configureQuery() {
         switch (this.query) {
+            // date has 3 hour difference
             case 'message':
                 return {
                     endTime: Date.now(),
@@ -52,17 +63,32 @@ class CW {
             const insightData = await cloudwatchlogs.getQueryResults({ queryId }).promise();
             if (insightData?.results.length > 0 && insightData?.status === 'Complete') {
                 if (this.query === 'message') {
-                    return insightData.results[1][2].value;
+                    return { ptr: insightData.results[insightData.results.length - 1][2].value, status: 'done', error: null };
                 } else if (this.query === 'requestId') {
                     const logNameArr = this.logGroupName.split('/');
                     const logName = logNameArr[logNameArr.length - 1];
 
-                    await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(insightData.results), (err) => console.log(err));
+                    // remove ptr from result array
+                    const result = insightData.results.map((record) => [record[0], record[1]]);
 
-                    this.setStatus('complete');
+                    await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(result), (err) => console.log(err));
+
                     console.log('Complete');
-                    break;
+                    // choose next lambda, set params
+                    const repeat = this.configureLogGroupNames(this.logGroupName);
+                    console.log(repeat);
+                    // stop loop
+                    if (!repeat) {
+                        this.setStatus('finish');
+                        return { ptr: null, status: 'finish', error: null };
+                    }
+                    // set params
+                    this.setParams({ id: this.cashedId, query: 'message' });
+                    return { ptr: null, status: 'running', error: null };
                 }
+            } else if (insightData?.results.length === 0 && insightData?.status === 'Complete') {
+                console.log('no records');
+                return { ptr: null, status: 'done', error: 'Records not found' };
             } else {
                 console.log(insightData);
             }
@@ -76,6 +102,24 @@ class CW {
     setParams(params) {
         for (let [key, value] of Object.entries(params)) {
             this[key] = value;
+        }
+    }
+
+    addToCash(id) {
+        this.cashedId = id;
+    }
+
+    getFromCash() {
+        return this.cashedId;
+    }
+
+    configureLogGroupNames(currentLambda) {
+        const getLambdaIndex = this.logGroupNames[this.method].indexOf(currentLambda);
+        if (getLambdaIndex === this.logGroupNames[this.method].length - 1) {
+            return false;
+        } else {
+            this.logGroupName = this.logGroupNames[this.method][getLambdaIndex + 1];
+            return true;
         }
     }
 

@@ -1,0 +1,44 @@
+[
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:57.880" },
+        { "field": "@message", "value": "END RequestId: 83fd9aea-e346-4858-aedf-ac22ac3d99ae\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:57.880" },
+        {
+            "field": "@message",
+            "value": "REPORT RequestId: 83fd9aea-e346-4858-aedf-ac22ac3d99ae\tDuration: 2435.58 ms\tBilled Duration: 2436 ms\tMemory Size: 256 MB\tMax Memory Used: 43 MB\t\n"
+        }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:57.879" },
+        { "field": "@message", "value": "2021-07-06T09:14:57.879Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\tProjectId: bc71011512804e80947780c6a5e3c4ac\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:57.879" },
+        { "field": "@message", "value": "2021-07-06T09:14:57.879Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\tStatusCode: 200\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:57.879" },
+        { "field": "@message", "value": "2021-07-06T09:14:57.879Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\tResultData: OK\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:55.478" },
+        { "field": "@message", "value": "2021-07-06T09:14:55.474Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\tnull\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:55.478" },
+        { "field": "@message", "value": "2021-07-06T09:14:55.478Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\tResultUrl: https://enot.io/billing/trustbank/ecapz?a=1\n" }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:55.446" },
+        {
+            "field": "@message",
+            "value": "2021-07-06T09:14:55.445Z\t83fd9aea-e346-4858-aedf-ac22ac3d99ae\tINFO\t{\"sp_json\":\"{\\\"sp_order_id\\\":\\\"27223560\\\",\\\"sp_payment_id\\\":47715425,\\\"sp_type\\\":\\\"CARD_PAYMENT\\\",\\\"sp_amount\\\":\\\"200.00\\\",\\\"sp_currency\\\":\\\"RUB\\\",\\\"sp_net_amount\\\":190,\\\"sp_ps_amount\\\":200,\\\"sp_commission\\\":10,\\\"sp_ps_full_amount\\\":200,\\\"sp_ps_currency\\\":\\\"RUB\\\",\\\"sp_payment_system\\\":\\\"CARD\\\",\\\"sp_result\\\":1,\\\"sp_payment_date\\\":\\\"2021-07-06 09:14:54\\\",\\\"sp_user_phone\\\":\\\"77777777777\\\",\\\"sp_card_pan\\\":\\\"516874******5388\\\",\\\"sp_user_params\\\":\\\"bc71011512804e80947780c6a5e3c4ac|https:\\\\\\/\\\\\\/enot.io\\\\\\/billing\\\\\\/trustbank\\\\\\/ecapz?a=1\\\",\\\"sp_salt\\\":8457926599,\\\"sp_sig\\\":\\\"72d86ba60248fb0d6cc5472d16acb1b84d6058e61af1a21cb38e19f010159487\\\"}\"}\n"
+        }
+    ],
+    [
+        { "field": "@timestamp", "value": "2021-07-06 09:14:55.442" },
+        { "field": "@message", "value": "START RequestId: 83fd9aea-e346-4858-aedf-ac22ac3d99ae Version: $LATEST\n" }
+    ]
+]
