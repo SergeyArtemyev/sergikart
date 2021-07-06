@@ -8,7 +8,7 @@ const cardValidation = (request) => {
 // implementation before getting customer from DB
 
 const isCardValid = cardValidation(request);
-if (!isCardValid) {
+if (isCardValid) {
     await putCustomMetrics({ mn, obj: { code: 400084, pid: request.project, gid: 0, isi: true, am: '0' } });
     return responseMessage(401, 400084, 'Credit card is expired');
 }
