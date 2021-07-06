@@ -14,5 +14,5 @@ const cardValidation = (request) => {
 const isCardValid = cardValidation(request);
 if (!isCardValid) {
     await putCustomMetrics({ mn, obj: { code: 400084, pid: request.project, gid: 0, isi: true, am: '0' } });
-    return responseMessage(401, 400084, 'Creadit card is expired');
+    return responseMessage(401, 400084, 'Credit card is expired');
 }
