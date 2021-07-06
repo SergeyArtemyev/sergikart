@@ -2,11 +2,7 @@ const cardValidation = (request) => {
     const currentDate = new Date().getTime();
     const cardExpirationDate = new Date(`${request.expiration_year},${request.expiration_month}, 01`).getTime();
 
-    if (cardExpirationDate <= currentDate) {
-        return false;
-    } else {
-        return true;
-    }
+    return cardExpirationDate <= currentDate ? false : true    
 };
 
 // implementation before getting customer from DB
