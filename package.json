@@ -2,18 +2,29 @@
     "name": "testscripts",
     "version": "1.0.0",
     "description": "",
-    "main": "regkey.js",
+    "main": "stuff.js",
+    "dependencies": {
+        "aws-sdk": "^2.939.0",
+        "axios": "^0.21.1",
+        "express": "^4.17.1",
+        "jest": "^27.0.6"
+    },
+    "devDependencies": {
+        "concurrently": "^6.2.0",
+        "nodemon": "^2.0.9"
+    },
     "scripts": {
-        "test": "jest"
+        "start": "nodemon server/server.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SergeyArtemyev/sergikart.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "dependencies": {
-        "aws-sdk": "^2.939.0",
-        "axios": "^0.21.1"
+    "bugs": {
+        "url": "https://github.com/SergeyArtemyev/sergikart/issues"
     },
-    "devDependencies": {
-        "jest": "^27.0.6"
-    }
+    "homepage": "https://github.com/SergeyArtemyev/sergikart#readme"
 }

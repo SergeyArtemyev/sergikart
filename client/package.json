@@ -1,0 +1,17 @@
+{
+    "name": "testscripts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "regkey.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {},
+    "devDependencies": {
+        "jest": "^27.0.6"
+    },
+    "proxy": "http://localhost:8000"
+}

@@ -54,7 +54,11 @@ class CW {
                 if (this.query === 'message') {
                     return insightData.results[1][2].value;
                 } else if (this.query === 'requestId') {
-                    await fs.writeFile('log.json', JSON.stringify(insightData.results), (err) => console.log(err));
+                    const logNameArr = this.logGroupName.split('/');
+                    const logName = logNameArr[logNameArr.length - 1];
+
+                    await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(insightData.results), (err) => console.log(err));
+
                     this.setStatus('complete');
                     console.log('Complete');
                     break;

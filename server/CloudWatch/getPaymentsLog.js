@@ -1,12 +1,8 @@
-const AWS = require('aws-sdk');
 const CW = require('./CW');
 
 const getLogsData = async (inputData) => {
     const CWInstance = new CW(inputData);
     let ptr;
-
-    //TO DO
-    // implement loop to repeat query
 
     while (true) {
         let params = CWInstance.configureQuery();
@@ -28,12 +24,14 @@ const getLogsData = async (inputData) => {
     }
 };
 
-getLogsData({
-    logGroupName: '/aws/lambda/psp-dev-ecapzProcessAPayment',
-    range: 1,
-    id: '27057050',
-    limit: 10,
-    query: 'message',
-})
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
+// getLogsData({
+//     logGroupName: '/aws/lambda/psp-dev-ecapzProcessAPayment',
+//     range: 1,
+//     id: '27057050',
+//     limit: 10,
+//     query: 'message',
+// })
+//     .then((data) => console.log(data))
+//     .catch((err) => console.log(err));
+
+module.exports = getLogsData;
