@@ -30,7 +30,7 @@ class CW {
 
     configureQuery() {
         switch (this.query) {
-            // date has 3 hour difference
+            // date has 3 hour difference (maybe)
             case 'message':
                 return {
                     endTime: Date.now(),
@@ -63,8 +63,15 @@ class CW {
             const insightData = await cloudwatchlogs.getQueryResults({ queryId }).promise();
             if (insightData?.results.length > 0 && insightData?.status === 'Complete') {
                 if (this.query === 'message') {
-                    return { ptr: insightData.results[insightData.results.length - 1][2].value, status: 'done', error: null };
+                    // get the latest record if lambda getStatus (index 0 because desc order)
+                    if (new RegExp(/status/i).test(this.logGroupName)) {
+                        return { ptr: insightData.results[0][2].value, status: 'done', error: null };
+                    } else {
+                        //get the first record
+                        return { ptr: insightData.results[insightData.results.length - 1][2].value, status: 'done', error: null };
+                    }
                 } else if (this.query === 'requestId') {
+                    // get log name
                     const logNameArr = this.logGroupName.split('/');
                     const logName = logNameArr[logNameArr.length - 1];
 
@@ -74,7 +81,7 @@ class CW {
                     await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(result), (err) => console.log(err));
 
                     console.log('Complete');
-                    // choose next lambda, set params
+                    // choose next lambda
                     const repeat = this.configureLogGroupNames(this.logGroupName);
                     console.log(repeat);
                     // stop loop
@@ -82,7 +89,7 @@ class CW {
                         this.setStatus('finish');
                         return { ptr: null, status: 'finish', error: null };
                     }
-                    // set params
+                    // set params, get cashed id
                     this.setParams({ id: this.cashedId, query: 'message' });
                     return { ptr: null, status: 'running', error: null };
                 }

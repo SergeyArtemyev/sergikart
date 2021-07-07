@@ -1,6 +1,2 @@
-let a =
-    'CnMKOQo1OTg1MTIzMzA4ODc1Oi9hd3MvbGFtYmRhL3BzcC1kZXYtZWNhcHpQcm9jZXNzQVBheW1lbnQQAxI2GhgCBf2sa+oAAAADJlzn0QAGDh2HoAAAAaIgASjsoNaRpy8w9pnbkacvODBAmYcBSJpoUK1MECYYAQ==';
-let b =
-    'CnMKOQo1OTg1MTIzMzA4ODc1Oi9hd3MvbGFtYmRhL3BzcC1kZXYtZWNhcHpQcm9jZXNzQVBheW1lbnQQAxI2GhgCBf2sa+oAAAADJlzn0QAGDh2HoAAAAaIgASjsoNaRpy8w9pnbkacvODBAmYcBSJpoUK1MECsYAQ==';
-
-console.log(a === b);
+let logGroupName = '/aws/lambda/psp-dev-ecapzGetPaymenttatus';
+console.log(new RegExp(/status/i).test(logGroupName));
