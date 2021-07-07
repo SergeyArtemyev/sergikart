@@ -60,44 +60,49 @@ class CW {
 
     async getQueryResult(queryId) {
         while (true) {
-            const insightData = await cloudwatchlogs.getQueryResults({ queryId }).promise();
-            if (insightData?.results.length > 0 && insightData?.status === 'Complete') {
-                if (this.query === 'message') {
-                    // get the latest record if lambda getStatus (index 0 because desc order)
-                    if (new RegExp(/status/i).test(this.logGroupName)) {
-                        return { ptr: insightData.results[0][2].value, status: 'done', error: null };
-                    } else {
-                        //get the first record
-                        return { ptr: insightData.results[insightData.results.length - 1][2].value, status: 'done', error: null };
+            try {
+                const insightData = await cloudwatchlogs.getQueryResults({ queryId }).promise();
+                if (insightData?.results.length > 0 && insightData?.status === 'Complete') {
+                    if (this.query === 'message') {
+                        // get the latest record if lambda getStatus (index 0 because desc order)
+                        if (new RegExp(/status/i).test(this.logGroupName)) {
+                            return { ptr: insightData.results[0][2].value, status: 'done', error: null };
+                        } else {
+                            //get the first record
+                            return { ptr: insightData.results[insightData.results.length - 1][2].value, status: 'done', error: null };
+                        }
+                    } else if (this.query === 'requestId') {
+                        // get log name
+                        const logNameArr = this.logGroupName.split('/');
+                        const logName = logNameArr[logNameArr.length - 1];
+
+                        // remove ptr from result array
+                        const result = insightData.results.map((record) => [record[0], record[1]]);
+
+                        await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(result), (err) => console.log(err));
+
+                        console.log('Complete');
+                        // choose next lambda
+                        const repeat = this.configureLogGroupNames(this.logGroupName);
+                        console.log(repeat);
+                        // stop loop
+                        if (!repeat) {
+                            this.setStatus('finish');
+                            return { ptr: null, status: 'finish', error: null };
+                        }
+                        // set params, get cashed id
+                        this.setParams({ id: this.cashedId, query: 'message' });
+                        return { ptr: null, status: 'running', error: null };
                     }
-                } else if (this.query === 'requestId') {
-                    // get log name
-                    const logNameArr = this.logGroupName.split('/');
-                    const logName = logNameArr[logNameArr.length - 1];
-
-                    // remove ptr from result array
-                    const result = insightData.results.map((record) => [record[0], record[1]]);
-
-                    await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(result), (err) => console.log(err));
-
-                    console.log('Complete');
-                    // choose next lambda
-                    const repeat = this.configureLogGroupNames(this.logGroupName);
-                    console.log(repeat);
-                    // stop loop
-                    if (!repeat) {
-                        this.setStatus('finish');
-                        return { ptr: null, status: 'finish', error: null };
-                    }
-                    // set params, get cashed id
-                    this.setParams({ id: this.cashedId, query: 'message' });
-                    return { ptr: null, status: 'running', error: null };
+                } else if (insightData?.results.length === 0 && insightData?.status === 'Complete') {
+                    console.log('no records');
+                    return { ptr: null, status: 'done', error: 'Records not found' };
+                } else {
+                    console.log(insightData);
                 }
-            } else if (insightData?.results.length === 0 && insightData?.status === 'Complete') {
-                console.log('no records');
-                return { ptr: null, status: 'done', error: 'Records not found' };
-            } else {
-                console.log(insightData);
+            } catch (error) {
+                console.log(error);
+                throw error;
             }
         }
     }
