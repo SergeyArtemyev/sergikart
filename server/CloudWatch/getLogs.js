@@ -17,10 +17,10 @@ const getLogsData = async (inputData) => {
             if (status === 'done' && error === null) {
                 if (CWInstance.getStatus() !== 'finish') {
                     const data = await CWInstance.getLogRecord(ptr);
-                    console.log(data);
+                    // console.log(data);
                     // set params
                     CWInstance.setParams({ id: data.logRecord['@requestId'], query: 'requestId' });
-                    console.log(params);
+                    // console.log(params);
                 } else {
                     return {};
                 }
@@ -40,7 +40,7 @@ const getLogsData = async (inputData) => {
 // getLogsData({
 //     logGroupName: '/aws/lambda/psp-dev-ecapzProcessAPayment',
 //     range: 1,
-//     id: '27315004',
+//     id: '27349826',
 //     limit: 20,
 //     query: 'message',
 //     method: 'payment',
@@ -50,7 +50,7 @@ const getLogsData = async (inputData) => {
 getLogsData({
     logGroupName: '/aws/lambda/psp-dev-ecapzPayout',
     range: 3,
-    id: '9249198',
+    id: '9275347',
     limit: 20,
     query: 'message',
     method: 'payout',

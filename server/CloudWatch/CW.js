@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const AWS = require('aws-sdk');
 
 AWS.config.update({ region: 'us-east-1' });
@@ -79,12 +80,19 @@ class CW {
                         // remove ptr from result array
                         const result = insightData.results.map((record) => [record[0], record[1]]);
 
-                        await fs.writeFile(`./server/CloudWatch/logs/${logName}.json`, JSON.stringify(result), (err) => console.log(err));
+                        const isFolder = await this.isFolderExists();
+
+                        if (isFolder) {
+                            fs.writeFile(path.join(__dirname, `./logs/${logName}.json`), JSON.stringify(result), (err) => err && console.log(err));
+                        } else {
+                            fs.mkdir(path.join(__dirname, 'logs'), (err) => err && console.log(err));
+                            fs.writeFile(path.join(__dirname, `./logs/${logName}.json`), JSON.stringify(result), (err) => err && console.log(err));
+                        }
 
                         console.log('Complete');
                         // choose next lambda
                         const repeat = this.configureLogGroupNames(this.logGroupName);
-                        console.log(repeat);
+                        console.log('repeat: ', repeat);
                         // stop loop
                         if (!repeat) {
                             this.setStatus('finish');
@@ -98,7 +106,8 @@ class CW {
                     console.log('no records');
                     return { ptr: null, status: 'done', error: 'Records not found' };
                 } else {
-                    console.log(insightData);
+                    // console.log(insightData);
+                    console.log('looking for records');
                 }
             } catch (error) {
                 console.log(error);
@@ -132,6 +141,16 @@ class CW {
         } else {
             this.logGroupName = this.logGroupNames[this.method][getLambdaIndex + 1];
             return true;
+        }
+    }
+
+    async isFolderExists() {
+        try {
+            await fs.promises.access(path.join(__dirname, '/logs'));
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
         }
     }
 
